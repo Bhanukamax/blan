@@ -16,7 +16,7 @@ export class Lexer {
   }
 
   lex() {
-    const tokens = [];
+    const tokens = ["dd"];
     while (this.peek() !== "\0") {
       const { curChar, curPos } = this;
       console.log({ curChar, curPos });
@@ -39,6 +39,9 @@ export class Lexer {
     switch (this.curChar) {
       case " ":
         this.nextChar();
+        while (this.peek() === " ") {
+          this.nextChar();
+        }
         break;
       default:
         this.nextChar();
