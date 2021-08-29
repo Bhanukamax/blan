@@ -1,6 +1,9 @@
 // import { Token } from "./types";
 
-import { Token } from "./types";
+import { Token, TokenKind } from "./types";
+
+
+const keywords = ["let"];
 
 export class Lexer {
   source: string;
@@ -13,16 +16,17 @@ export class Lexer {
     this.curPos = -1;
     this.curChar = "";
     this.nextChar();
+    this.tokens = [];
   }
 
   lex() {
-    const tokens = ["dd"];
     while (this.peek() !== "\0") {
       const { curChar, curPos } = this;
       console.log({ curChar, curPos });
       this.getToken();
     }
-    return tokens;
+
+    return this.tokens;
   }
 
   nextChar() {
@@ -38,14 +42,42 @@ export class Lexer {
   getToken() {
     switch (this.curChar) {
       case " ":
-        this.nextChar();
-        while (this.peek() === " ") {
+        while (this.curChar === " ") {
           this.nextChar();
         }
         break;
+
+      case "+":
+        this.addToken(TokenKind.PLUS);
+        break;
+
+      case "=":
+        this.addToken(TokenKind.ASSIGNMENT);
+        break;
+
+      case ">":
+        this.addToken(TokenKind.GT);
+        break;
+
+      case "<":
+        this.addToken(TokenKind.LT);
+        break;
+
+      case "(":
+        this.addToken(TokenKind.LPAREN);
+        break;
+
       default:
         this.nextChar();
     }
+  }
+
+  addToken(kind: TokenKind) {
+    this.tokens.push({
+      kind,
+      value: this.curChar,
+    });
+    this.nextChar();
   }
 
   peek() {

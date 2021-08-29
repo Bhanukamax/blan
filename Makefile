@@ -1,7 +1,8 @@
-all: out/*.js
+default: build
+	npm run run
 
-out/%.js: ./src/%.ts
+build: out/*.js
+
+out/*.js: ./src/*.ts
 	npm run build
 
-run: all
-	npm run run

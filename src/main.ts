@@ -1,9 +1,9 @@
 import { Lexer } from "./lexer";
 
 function main(): void {
-  const input = "LET foobar = 123";
 
   // const tokens = lexer.init(input);
+  const input = "let +  foobar = 222 + 123";
   const lex = new Lexer(input);
   const tokens = lex.lex();
 
