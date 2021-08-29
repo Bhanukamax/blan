@@ -2,7 +2,6 @@
 
 import { Token, TokenKind } from "./types";
 
-
 const keywords = ["let"];
 
 export class Lexer {
@@ -40,44 +39,75 @@ export class Lexer {
   }
 
   getToken() {
-    switch (this.curChar) {
-      case " ":
-        while (this.curChar === " ") {
-          this.nextChar();
-        }
-        break;
-
-      case "+":
-        this.addToken(TokenKind.PLUS);
-        break;
-
-      case "=":
-        this.addToken(TokenKind.ASSIGNMENT);
-        break;
-
-      case ">":
-        this.addToken(TokenKind.GT);
-        break;
-
-      case "<":
-        this.addToken(TokenKind.LT);
-        break;
-
-      case "(":
-        this.addToken(TokenKind.LPAREN);
-        break;
-
-      default:
+    if (this.curChar === " ") {
+      while (this.curChar === " ") {
         this.nextChar();
+      }
+      return;
     }
+
+    if (this.curChar === "+") {
+      this.addToken(TokenKind.PLUS);
+      this.nextChar();
+      return;
+    }
+
+    if (this.curChar === "=") {
+      this.addToken(TokenKind.ASSIGNMENT);
+      this.nextChar();
+      return;
+    }
+
+    if (this.curChar === ">") {
+      this.addToken(TokenKind.GT);
+      this.nextChar();
+      return;
+    }
+
+    if (this.curChar === "<") {
+      this.addToken(TokenKind.LT);
+      this.nextChar();
+      return;
+    }
+
+    if (this.curChar === "(") {
+      this.addToken(TokenKind.LPAREN);
+      this.nextChar();
+      return;
+    }
+
+    // Identifiers
+    if (this.curChar.match(/[a-zA-Z]/)) {
+      let word = this.curChar;
+      this.nextChar();
+      while (this.curChar.match(/[a-zA-Z]/)) {
+        word += this.curChar;
+        this.nextChar();
+      }
+      this.addToken(TokenKind.IDENTIFIER, word);
+    }
+
+    if (this.curChar.match(/[0-9]/)) {
+      let word = this.curChar;
+      this.nextChar();
+
+      while (this.curChar.match(/[0-9]/)) {
+        word += this.curChar;
+        this.nextChar();
+      }
+
+      this.addToken(TokenKind.INTEGER, word);
+    }
+
+    this.nextChar();
+    return;
   }
 
-  addToken(kind: TokenKind) {
+  addToken(kind: TokenKind, value: string = "") {
     this.tokens.push({
       kind,
-      value: this.curChar,
+      value: value || this.curChar,
     });
-    this.nextChar();
   }
 
   peek() {

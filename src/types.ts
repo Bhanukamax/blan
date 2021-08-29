@@ -8,6 +8,8 @@ export enum TokenKind {
   ASSIGNMENT = "ASSIGNMENT",
   PLUS = "PLUS",
   MINUS = "MINUS",
+  IDENTIFIER = "IDENTIFIER",
+  INTEGER = "INTENGER",
 }
 
 export type Token = {
