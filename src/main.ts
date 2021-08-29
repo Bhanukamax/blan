@@ -7,7 +7,7 @@ function main(): void {
   const lex = new Lexer(input);
   const tokens = lex.lex();
 
-  console.log(tokens);
+  console.log({ tokens });
 }
 
 main();

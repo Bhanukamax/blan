@@ -1,15 +1,18 @@
 // import { Token } from "./types";
 
+import { Token } from "./types";
+
 export class Lexer {
   source: string;
   curPos: number;
   curChar: string;
+  tokens: Array<Token>;
 
   constructor(source: string) {
     this.source = source;
     this.curPos = -1;
     this.curChar = "";
-    this.movePos();
+    this.nextChar();
   }
 
   lex() {
@@ -17,19 +20,28 @@ export class Lexer {
     while (this.peek() !== "\0") {
       const { curChar, curPos } = this;
       console.log({ curChar, curPos });
-      tokens.push({ curChar, curPos });
-      this.movePos();
+      this.getToken();
     }
     return tokens;
   }
 
-  movePos() {
+  nextChar() {
     this.curPos += 1;
     if (this.curPos >= this.source.length) {
       // # EOF
       this.curChar = "\0";
     } else {
       this.curChar = this.source[this.curPos];
+    }
+  }
+
+  getToken() {
+    switch (this.curChar) {
+      case " ":
+        this.nextChar();
+        break;
+      default:
+        this.nextChar();
     }
   }
 
