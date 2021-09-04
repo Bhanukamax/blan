@@ -1,0 +1,8 @@
+default: build
+	npm run run
+
+build: out/*.js
+
+out/*.js: ./src/*.ts ./src/*.js
+	npm run build
+

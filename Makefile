@@ -1,8 +1,5 @@
-default: build
-	npm run run
+all:
+	node src/repl.js
 
-build: out/*.js
-
-out/*.js: ./src/*.ts
-	npm run build
-
+repl:
+	node src/repl.js

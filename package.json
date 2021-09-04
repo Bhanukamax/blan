@@ -1,16 +1,23 @@
 {
-  "name": "ts-blang",
+  "name": "blang-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc --build",
-    "run": "node out/main.js"
+    "build": "tsc --allowJs",
+    "run": "node src/main.js"
   },
+  "bin": {
+    "blan": "src/main.js"
+  },
+  "allowjs": true,
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "typescript": "^4.4.2"
+  },
+  "dependencies": {
+    "readline-sync": "^1.4.10"
   }
 }
