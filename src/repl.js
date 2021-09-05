@@ -11,7 +11,7 @@ function repl(str) {
 
   const lex = new lexer_1.Lexer(str);
   const tokens = lex.lex();
-  // console.log(tokens);
+  console.log(tokens);
   try {
     // console.log("dadsfads");
     const ast = parser(tokens);
