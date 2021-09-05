@@ -4,14 +4,17 @@ const parser = require("./parser");
 
 // Wait for user's response.
 
+console.log("BLAN Repl!!")
+
 function repl(str) {
+
   const lex = new lexer_1.Lexer(str);
   const tokens = lex.lex();
   console.log(tokens);
   try {
-    console.log('dadsfads')
+    console.log("dadsfads");
     const ast = parser(tokens);
-  return ast;
+    return ast;
   } catch (e) {
     console.log("\x1b[33m%s\x1b[0m", "Parsing error:", e);
   }

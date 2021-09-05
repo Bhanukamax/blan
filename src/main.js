@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-console.log("test");
 const lexer_1 = require("./lexer");
 const parser = require("./parser");
 const repl = require("./repl");
@@ -11,7 +10,6 @@ function main() {
   const input = `
 what => this + 2
 `;
-  console.log("the args", process.argv);
   let fileName = "./test.bmax";
   if (process.argv.length > 2) {
     fileName = process.argv[2];
@@ -25,7 +23,7 @@ what => this + 2
     console.log("done parsing", JSON.stringify(ast, null, 2));
   } else {
     repl();
-    console.log("nothing to be done");
+    console.log("nothing to be done") ;
   }
 }
 main();
