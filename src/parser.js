@@ -4,6 +4,10 @@ function parser(tokens) {
   let current = 0;
   let token = tokens[current];
 
+  function panik(prefix = "Unexpected token") {
+    throw `${prefix} ${JSON.stringify(token)}`;
+  }
+
   function advance() {
     token = tokens[current++];
   }
@@ -31,6 +35,44 @@ function parser(tokens) {
     };
   }
 
+  function parseBinaryExpression(left) {
+    let right;
+    const node = {
+      kind: "BinaryExpression",
+      value: token.value,
+      left,
+      right,
+    };
+    advance();
+    if (token.kind === Kinds.NUMBER) {
+      node.right = parseExpression();
+    }
+
+    return node;
+  }
+
+  function parseNumber() {
+    if (token.kind === Kinds.NUMBER) {
+      return {
+        kind: "Number",
+        value: token.value,
+      };
+    }
+    panik();
+  }
+
+  function parseExpression() {
+    let node = {};
+    if (token.kind === Kinds.NUMBER) {
+      node = parseNumber();
+      if (peek() === Kinds.PLUS) {
+        advance();
+        return parseBinaryExpression(node);
+      }
+    }
+    return node;
+  }
+
   function parseIdentifier() {
     if (token.kind !== Kinds.IDENT) {
       throw `Not an identifier ${JSON.stringify(token)}`;
@@ -47,9 +89,18 @@ function parser(tokens) {
     advance();
     const identifier = parseIdentifier();
 
+    advance();
+    if (token.kind !== Kinds.ASSIGN) {
+      throw `Unexpected token ${JSON.stringify(token)} `;
+    }
+    advance();
+
+    const exp = parseExpression();
+
     return {
       kind: "LetStatement",
       identifier,
+      expression: exp,
     };
   }
 
