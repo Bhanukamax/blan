@@ -13,6 +13,7 @@ const TokenKind = {
   RSQ: "RSQ",
 
   ASSIGN: "ASSIGN",
+  ARROW: "ARROW",
 
   // Binary operators
   PLUS: "PLUS",

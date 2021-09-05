@@ -1,6 +1,7 @@
 const { TokenKind: Kinds } = require("./token-kinds");
 
 function parser(tokens) {
+  const j = JSON.stringify;
   let current = 0;
   let token = tokens[current];
 
@@ -20,21 +21,6 @@ function parser(tokens) {
     }
   }
 
-  function NumberLiteral(token) {
-    return {
-      type: "NumberLiteral",
-      value: Number(token.value),
-    };
-  }
-
-  function MathOperator(token) {
-    return {
-      type: "MathOperator",
-      kind: token.kind,
-      value: token.value,
-    };
-  }
-
   function parseBinaryExpression(left) {
     let right;
     const node = {
@@ -44,11 +30,22 @@ function parser(tokens) {
       right,
     };
     advance();
-    if (token.kind === Kinds.NUMBER) {
+    if (token.kind === Kinds.NUMBER || token.kind === Kinds.IDENT) {
       node.right = parseExpression();
     }
 
     return node;
+  }
+
+  function parseIdentifier() {
+    if (token.kind !== Kinds.IDENT) {
+      panik("Not an identifier -> ");
+    }
+
+    return {
+      type: "Identifier",
+      value: token.value,
+    };
   }
 
   function parseNumber() {
@@ -63,8 +60,18 @@ function parser(tokens) {
 
   function parseExpression() {
     let node = {};
-    if (token.kind === Kinds.NUMBER) {
-      node = parseNumber();
+    if (token.kind === Kinds.NUMBER || token.kind === Kinds.IDENT) {
+      switch (token.kind) {
+        case Kinds.NUMBER:
+          node = parseNumber();
+          break;
+        case Kinds.IDENT:
+          node = parseIdentifier();
+          break;
+        default:
+          break;
+      }
+
       if (peek() === Kinds.PLUS) {
         advance();
         return parseBinaryExpression(node);
@@ -85,48 +92,106 @@ function parser(tokens) {
     return node;
   }
 
-  function parseIdentifier() {
-    if (token.kind !== Kinds.IDENT) {
-      panik("Not an identifier -> ");
-    }
-
-    return {
-      kind: Kinds.IDENT,
-      value: token.value,
-    };
-  }
-
   function parseLetStatement() {
-    advance();
     advance();
     const identifier = parseIdentifier();
 
     advance();
-    if (token.kind !== Kinds.ASSIGN) {
-      panik("Unexpected token -> ");
+
+    switch (token.kind) {
+      case Kinds.ASSIGN: {
+        advance();
+
+        const exp = parseExpression();
+        advance();
+
+        return {
+          type: "LetStatement",
+          identifier,
+          expression: exp,
+        };
+      }
+
+      case Kinds.IDENT: {
+        const node = {
+          type: "FunctionDeclaration",
+          name: identifier.value,
+          params: [],
+        };
+
+        while (token.kind === Kinds.IDENT) {
+          node.params.push({
+            type: "Parameter",
+            value: token.value,
+          });
+          advance();
+        }
+
+        debugger;
+        if (token.kind === Kinds.ASSIGN) {
+          advance();
+
+          const exp = parseExpression();
+          advance();
+          node.expression = exp;
+          return node;
+        } else {
+          panik(`Expected number, got ${JSON.stringify(token)}`);
+        }
+
+        panik("Failed to parse function declaration, Unexpected token -> ");
+      }
+      default:
+        return panik("Failed to parse Let statement, Unexpected token -> ");
     }
-    advance();
+  }
 
-    const exp = parseExpression();
-
-    return {
-      type: "LetStatement",
-      identifier,
-      expression: exp,
+  function parseFunctionCall() {
+    const node = {
+      type: "FunctionCall",
+      name: token.value,
+      arguments: [],
     };
+
+    advance();
+    while (token.kind === Kinds.IDENT || token.kind === Kinds.NUMBER) {
+      switch (token.kind) {
+        case Kinds.IDENT:
+          node.arguments.push(parseIdentifier());
+          break;
+        case Kinds.NUMBER:
+          node.arguments.push(parseNumber());
+      }
+      advance();
+    }
+    return node;
   }
 
   function parseStatements() {
     if (token.kind === Kinds.LET) {
       return parseLetStatement();
     }
+
+    if (token.kind === Kinds.IDENT) {
+      return parseFunctionCall();
+    }
+    if (token.kind === Kinds.NL) {
+      advance();
+      return { type: "NewLine" };
+    }
+    panik("Unable to parse statement, unexpected token -> ");
   }
 
   const ast = {
     type: "Program",
     body: [],
   };
-  ast.body.push(parseStatements());
+  advance();
+  while (current < tokens.length) {
+    ast.body.push(parseStatements());
+    // console.log(`${current} ${JSON.stringify(token)}`);
+  }
+  // console.log(`last token in memory >> ${JSON.stringify(token)}`);
 
   return ast;
 }

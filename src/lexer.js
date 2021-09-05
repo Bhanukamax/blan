@@ -13,7 +13,7 @@ class Lexer {
   }
 
   lex() {
-    console.log("source", this.source);
+    // console.log("source", this.source);
     while (this.peek() !== "\0") {
       const { curChar, curPos } = this;
       this.getToken();
@@ -88,6 +88,11 @@ class Lexer {
     // }
 
     if (this.curChar === "=") {
+      if (this.peek() === ">") {
+        this.nextChar();
+        this.addToken(TokenKind.ARROW, "=>");
+        return;
+      }
       this.addToken(TokenKind.ASSIGN);
       return;
     }
