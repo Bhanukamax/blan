@@ -88,21 +88,50 @@ function parser(tokens) {
     advance();
 
     switch (token.kind) {
-      case Kinds.ASSIGN:
-        {
+      case Kinds.ASSIGN: {
+        advance();
+
+        const exp = parseExpression();
+        advance();
+
+        return {
+          type: "LetStatement",
+          identifier,
+          expression: exp,
+        };
+      }
+
+      case Kinds.IDENT: {
+        const node = {
+          type: "FunctionDeclaration",
+          name: identifier,
+          params: [],
+        };
+
+        while (token.kind === Kinds.IDENT) {
+          node.params.push({
+            type: "Parameter",
+            value: token.value,
+          });
+          advance();
+        }
+
+        debugger;
+        if (token.kind === Kinds.ASSIGN) {
           advance();
 
           const exp = parseExpression();
           advance();
-
-          return {
-            type: "LetStatement",
-            identifier,
-            expression: exp,
-          };
+          node.expression = exp;
+          return node;
+        } else {
+          panik(`Expected number, got ${JSON.stringify(token)}`);
         }
+
+        panik("Failed to parse function declaration, Unexpected token -> ");
+      }
       default:
-        return panik("Unexpected token -> ");
+        return panik("Failed to parse Let statement, Unexpected token -> ");
     }
   }
 
@@ -114,7 +143,7 @@ function parser(tokens) {
       advance();
       return { type: "NewLine" };
     }
-    panik("Unexpected token -> ");
+    panik("Unable to parse statement, unexpected token -> ");
   }
 
   const ast = {
