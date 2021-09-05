@@ -20,21 +20,6 @@ function parser(tokens) {
     }
   }
 
-  function NumberLiteral(token) {
-    return {
-      type: "NumberLiteral",
-      value: Number(token.value),
-    };
-  }
-
-  function MathOperator(token) {
-    return {
-      type: "MathOperator",
-      kind: token.kind,
-      value: token.value,
-    };
-  }
-
   function parseBinaryExpression(left) {
     let right;
     const node = {
@@ -98,7 +83,6 @@ function parser(tokens) {
 
   function parseLetStatement() {
     advance();
-    advance();
     const identifier = parseIdentifier();
 
     advance();
@@ -108,6 +92,7 @@ function parser(tokens) {
     advance();
 
     const exp = parseExpression();
+    advance();
 
     return {
       type: "LetStatement",
@@ -126,7 +111,15 @@ function parser(tokens) {
     type: "Program",
     body: [],
   };
-  ast.body.push(parseStatements());
+  advance();
+  while (current < tokens.length) {
+    ast.body.push(parseStatements());
+    console.log(`${current} ${JSON.stringify(token)}`)
+    if (token.kind === Kinds.NL) {
+      advance();
+    }
+  }
+  console.log(`last token in memory >> ${JSON.stringify(token)}`);
 
   return ast;
 }

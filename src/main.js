@@ -13,6 +13,10 @@ what => this + 2
   let fileName = "./test.bmax";
   if (process.argv.length > 2) {
     fileName = process.argv[2];
+    const traceIndex = process.argv.indexOf("--trace-uncaught");
+    if (traceIndex > 0) {
+      fileName = process.argv[traceIndex + 2];
+    }
 
     const fileInput = readFileSync(fileName);
     const lex = new lexer_1.Lexer(fileInput.toString());

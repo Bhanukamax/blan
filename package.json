@@ -4,17 +4,18 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha",
     "build": "tsc --allowJs",
     "run": "node src/main.js"
   },
   "bin": {
-    "blan": "src/main.js"
+    "blan": "src/main.js --trace-uncaught"
   },
   "allowjs": true,
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "mocha": "^9.1.1",
     "typescript": "^4.4.2"
   },
   "dependencies": {
