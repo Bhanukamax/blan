@@ -3,6 +3,7 @@ const TokenKind = {
   LPAREN: "LPAREN",
   RPAREN: "RPAREN",
   KEYWORD: "KEYWORD",
+  PRINT: "PRINT",
   LET: "LET",
 
   EQ: "EQ",
@@ -13,8 +14,11 @@ const TokenKind = {
 
   ASSIGN: "ASSIGN",
 
+  // Binary operators
   PLUS: "PLUS",
   MINUS: "MINUS",
+  MUL: "MUL",
+  DIV: "DIV",
 
   IDENT: "IDENT",
   NUMBER: "NUMBER",

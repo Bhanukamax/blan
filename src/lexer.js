@@ -62,6 +62,21 @@ class Lexer {
       return;
     }
 
+    if (this.curChar === "-") {
+      this.addToken(TokenKind.MINUS);
+      return;
+    }
+
+    if (this.curChar === "*") {
+      this.addToken(TokenKind.MUL);
+      return;
+    }
+
+    if (this.curChar === "/") {
+      this.addToken(TokenKind.DIV);
+      return;
+    }
+
     // if (this.curChar === ":") {
     //   if (this.peek() === "=") {
     //     let word = this.curChar;

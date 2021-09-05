@@ -38,8 +38,8 @@ function parser(tokens) {
   function parseBinaryExpression(left) {
     let right;
     const node = {
-      kind: "BinaryExpression",
-      value: token.value,
+      type: "BinaryExpression",
+      operator: token.value,
       left,
       right,
     };
@@ -54,8 +54,8 @@ function parser(tokens) {
   function parseNumber() {
     if (token.kind === Kinds.NUMBER) {
       return {
-        kind: "Number",
-        value: token.value,
+        type: "NumberLiteral",
+        value: Number(token.value),
       };
     }
     panik();
@@ -69,18 +69,30 @@ function parser(tokens) {
         advance();
         return parseBinaryExpression(node);
       }
+      if (peek() === Kinds.MINUS) {
+        advance();
+        return parseBinaryExpression(node);
+      }
+      if (peek() === Kinds.MUL) {
+        advance();
+        return parseBinaryExpression(node);
+      }
+      if (peek() === Kinds.DIV) {
+        advance();
+        return parseBinaryExpression(node);
+      }
     }
     return node;
   }
 
   function parseIdentifier() {
     if (token.kind !== Kinds.IDENT) {
-      throw `Not an identifier ${JSON.stringify(token)}`;
+      panik("Not an identifier -> ");
     }
 
     return {
       kind: Kinds.IDENT,
-      token: token.value,
+      value: token.value,
     };
   }
 
@@ -91,14 +103,14 @@ function parser(tokens) {
 
     advance();
     if (token.kind !== Kinds.ASSIGN) {
-      throw `Unexpected token ${JSON.stringify(token)} `;
+      panik("Unexpected token -> ");
     }
     advance();
 
     const exp = parseExpression();
 
     return {
-      kind: "LetStatement",
+      type: "LetStatement",
       identifier,
       expression: exp,
     };
