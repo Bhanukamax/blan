@@ -88,6 +88,11 @@ class Lexer {
     // }
 
     if (this.curChar === "=") {
+      if (this.peek() === ">") {
+        this.nextChar();
+        this.addToken(TokenKind.ARROW, "=>");
+        return;
+      }
       this.addToken(TokenKind.ASSIGN);
       return;
     }

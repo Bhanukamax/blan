@@ -86,19 +86,24 @@ function parser(tokens) {
     const identifier = parseIdentifier();
 
     advance();
-    if (token.kind !== Kinds.ASSIGN) {
-      panik("Unexpected token -> ");
+
+    switch (token.kind) {
+      case Kinds.ASSIGN:
+        {
+          advance();
+
+          const exp = parseExpression();
+          advance();
+
+          return {
+            type: "LetStatement",
+            identifier,
+            expression: exp,
+          };
+        }
+      default:
+        return panik("Unexpected token -> ");
     }
-    advance();
-
-    const exp = parseExpression();
-    advance();
-
-    return {
-      type: "LetStatement",
-      identifier,
-      expression: exp,
-    };
   }
 
   function parseStatements() {
@@ -107,11 +112,10 @@ function parser(tokens) {
     }
     if (token.kind === Kinds.NL) {
       advance();
-      return {type: "NewLine"};
+      return { type: "NewLine" };
     }
-    panik("Unexpected token -> "  )
+    panik("Unexpected token -> ");
   }
-
 
   const ast = {
     type: "Program",
