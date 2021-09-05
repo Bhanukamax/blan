@@ -115,7 +115,7 @@ function parser(tokens) {
       case Kinds.IDENT: {
         const node = {
           type: "FunctionDeclaration",
-          name: identifier,
+          name: identifier.value,
           params: [],
         };
 
@@ -189,9 +189,9 @@ function parser(tokens) {
   advance();
   while (current < tokens.length) {
     ast.body.push(parseStatements());
-    console.log(`${current} ${JSON.stringify(token)}`);
+    // console.log(`${current} ${JSON.stringify(token)}`);
   }
-  console.log(`last token in memory >> ${JSON.stringify(token)}`);
+  // console.log(`last token in memory >> ${JSON.stringify(token)}`);
 
   return ast;
 }

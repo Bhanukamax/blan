@@ -13,7 +13,7 @@ class Lexer {
   }
 
   lex() {
-    console.log("source", this.source);
+    // console.log("source", this.source);
     while (this.peek() !== "\0") {
       const { curChar, curPos } = this;
       this.getToken();

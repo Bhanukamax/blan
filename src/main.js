@@ -2,6 +2,7 @@
 const lexer_1 = require("./lexer");
 const parser = require("./parser");
 const repl = require("./repl");
+const evaluator = require('./eval');
 
 const { readFileSync } = require("fs");
 
@@ -15,7 +16,7 @@ what => this + 2
     fileName = process.argv[2];
     const traceIndex = process.argv.indexOf("--trace-uncaught");
     if (traceIndex > 0) {
-      fileName = process.argv[traceIndex + 2];
+      fileName = process.argv[traceIndex +  2];
     }
 
     const fileInput = readFileSync(fileName);
@@ -25,6 +26,9 @@ what => this + 2
 
     const ast = parser(tokens);
     console.log("done parsing", JSON.stringify(ast, null, 2));
+    console.log('evaluating the code::::')
+    evaluator(ast);
+
   } else {
     repl();
     console.log("nothing to be done") ;

@@ -1,6 +1,7 @@
 var readlineSync = require("readline-sync");
 const lexer_1 = require("./lexer");
 const parser = require("./parser");
+const eval = require('./eval');
 
 // Wait for user's response.
 
@@ -10,9 +11,9 @@ function repl(str) {
 
   const lex = new lexer_1.Lexer(str);
   const tokens = lex.lex();
-  console.log(tokens);
+  // console.log(tokens);
   try {
-    console.log("dadsfads");
+    // console.log("dadsfads");
     const ast = parser(tokens);
     return ast;
   } catch (e) {
@@ -27,7 +28,8 @@ function runRepl() {
     try {
       var q = readlineSync.question("> ");
       const ast = repl(q);
-      console.log(JSON.stringify(ast, null, 2));
+      // console.log(JSON.stringify(ast, null, 2));
+      eval(ast);
     } catch (e) {
       console.log("Error: ", e);
     }
