@@ -1,6 +1,7 @@
 const { TokenKind: Kinds } = require("./token-kinds");
 
 function parser(tokens) {
+const j = JSON.stringify;
   let current = 0;
   let token = tokens[current];
 
@@ -135,9 +136,34 @@ function parser(tokens) {
     }
   }
 
+  function parseFunctionCall() {
+    const node = {
+      type: "FunctionCall",
+      name: token.value,
+      arguments: [],
+    };
+
+    advance();
+    while (token.kind === Kinds.IDENT || token.kind === Kinds.NUMBER) {
+      switch(token.kind) {
+      case Kinds.IDENT:
+        node.arguments.push(parseIdentifier());
+        break;
+      case Kinds.NUMBER:
+        node.arguments.push(parseNumber());
+      }
+      advance();
+    }
+    return node;
+  }
+
   function parseStatements() {
     if (token.kind === Kinds.LET) {
       return parseLetStatement();
+    }
+
+    if (token.kind === Kinds.IDENT) {
+      return parseFunctionCall();
     }
     if (token.kind === Kinds.NL) {
       advance();
