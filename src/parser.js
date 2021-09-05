@@ -30,7 +30,7 @@ function parser(tokens) {
       right,
     };
     advance();
-    if (token.kind === Kinds.NUMBER) {
+    if (token.kind === Kinds.NUMBER || token.kind === Kinds.IDENT) {
       node.right = parseExpression();
     }
 
@@ -60,8 +60,18 @@ function parser(tokens) {
 
   function parseExpression() {
     let node = {};
-    if (token.kind === Kinds.NUMBER) {
-      node = parseNumber();
+    if (token.kind === Kinds.NUMBER || token.kind === Kinds.IDENT) {
+      switch (token.kind) {
+        case Kinds.NUMBER:
+          node = parseNumber();
+          break;
+        case Kinds.IDENT:
+          node = parseIdentifier();
+          break;
+        default:
+          break;
+      }
+
       if (peek() === Kinds.PLUS) {
         advance();
         return parseBinaryExpression(node);

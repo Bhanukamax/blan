@@ -1,2 +1,2 @@
-let sum a b = 4 + 4
+let sum a b = a + b
 sum 4 5
