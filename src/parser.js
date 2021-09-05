@@ -1,7 +1,7 @@
 const { TokenKind: Kinds } = require("./token-kinds");
 
 function parser(tokens) {
-const j = JSON.stringify;
+  const j = JSON.stringify;
   let current = 0;
   let token = tokens[current];
 
@@ -145,12 +145,12 @@ const j = JSON.stringify;
 
     advance();
     while (token.kind === Kinds.IDENT || token.kind === Kinds.NUMBER) {
-      switch(token.kind) {
-      case Kinds.IDENT:
-        node.arguments.push(parseIdentifier());
-        break;
-      case Kinds.NUMBER:
-        node.arguments.push(parseNumber());
+      switch (token.kind) {
+        case Kinds.IDENT:
+          node.arguments.push(parseIdentifier());
+          break;
+        case Kinds.NUMBER:
+          node.arguments.push(parseNumber());
       }
       advance();
     }
