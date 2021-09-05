@@ -1,3 +1,2 @@
-let foo = 4
-let bar = 5 + 50
-let bar = 100 + 100
+let a = 4 + 4
+let b = 4

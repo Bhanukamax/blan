@@ -105,7 +105,13 @@ function parser(tokens) {
     if (token.kind === Kinds.LET) {
       return parseLetStatement();
     }
+    if (token.kind === Kinds.NL) {
+      advance();
+      return {type: "NewLine"};
+    }
+    panik("Unexpected token -> "  )
   }
+
 
   const ast = {
     type: "Program",
@@ -114,10 +120,7 @@ function parser(tokens) {
   advance();
   while (current < tokens.length) {
     ast.body.push(parseStatements());
-    console.log(`${current} ${JSON.stringify(token)}`)
-    if (token.kind === Kinds.NL) {
-      advance();
-    }
+    console.log(`${current} ${JSON.stringify(token)}`);
   }
   console.log(`last token in memory >> ${JSON.stringify(token)}`);
 
