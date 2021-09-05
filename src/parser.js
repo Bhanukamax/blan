@@ -37,6 +37,17 @@ function parser(tokens) {
     return node;
   }
 
+  function parseIdentifier() {
+    if (token.kind !== Kinds.IDENT) {
+      panik("Not an identifier -> ");
+    }
+
+    return {
+      type: "Identifier",
+      value: token.value,
+    };
+  }
+
   function parseNumber() {
     if (token.kind === Kinds.NUMBER) {
       return {
@@ -69,17 +80,6 @@ function parser(tokens) {
       }
     }
     return node;
-  }
-
-  function parseIdentifier() {
-    if (token.kind !== Kinds.IDENT) {
-      panik("Not an identifier -> ");
-    }
-
-    return {
-      kind: Kinds.IDENT,
-      value: token.value,
-    };
   }
 
   function parseLetStatement() {
