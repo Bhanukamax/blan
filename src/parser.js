@@ -127,7 +127,6 @@ function parser(tokens) {
           advance();
         }
 
-        debugger;
         if (token.kind === Kinds.ASSIGN) {
           advance();
 
