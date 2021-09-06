@@ -2,36 +2,60 @@
 const lexer_1 = require("./lexer");
 const parser = require("./parser");
 const repl = require("./repl");
-const evaluator = require('./eval');
+const evaluator = require("./eval");
 
 const { readFileSync } = require("fs");
+
+function hasFlag(flag) {
+  return process.argv.indexOf(flag) > -1;
+}
 
 function main() {
   // const tokens = lexer.init(input);
   const input = `
 what => this + 2
 `;
-  let fileName = "./test.bmax";
-  if (process.argv.length > 2) {
-    fileName = process.argv[2];
+  let fileNameIndex = 1;
+  let debugLexer = false;
+  let debugParser = false;
+  const fileExtention = ".bmax";
+  const argvLength = process.argv.length;
+  const fileName = process.argv[argvLength - 1];
+  const hasFile = fileName.match(/\.bmax/);
+  if (hasFlag("--lex")) {
+    fileNameIndex++;
+    debugLexer = true;
+  }
+
+  if (hasFlag("--parse")) {
+    fileNameIndex++;
+    debugParser = true;
+  }
+  if (hasFile) {
+    fileNameIndex = 2;
+
     const traceIndex = process.argv.indexOf("--trace-uncaught");
+
     if (traceIndex > 0) {
-      fileName = process.argv[traceIndex +  2];
+      fileNameIndex = traceIndex + 2;
     }
 
     const fileInput = readFileSync(fileName);
     const lex = new lexer_1.Lexer(fileInput.toString());
     const tokens = lex.lex();
-    console.log(tokens);
+    if (debugLexer) {
+      console.log(tokens);
+    }
 
     const ast = parser(tokens);
-    console.log("done parsing", JSON.stringify(ast, null, 2));
-    console.log('evaluating the code::::')
+    if (debugParser) {
+      console.log("done parsing", JSON.stringify(ast, null, 2));
+    }
+    console.log("evaluating the code::::");
     evaluator(ast);
-
   } else {
     repl();
-    console.log("nothing to be done") ;
+    console.log("nothing to be done");
   }
 }
 main();
