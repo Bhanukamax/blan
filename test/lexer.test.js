@@ -13,7 +13,12 @@ describe("lexer()", () => {
     ];
 
     const lex = new lexer.Lexer(input);
-    expect(lex.lex()).to.eql(output);
+
+    lex.lex().forEach(({ kind, value }, idx) => {
+      const { kind: oKind, value: oValue } = output[idx];
+
+      expect({ kind, value }).to.eql({ kind: oKind, value: oValue });
+    });
   });
 
   it("tokenize an assignment with expression", () => {
@@ -28,7 +33,12 @@ describe("lexer()", () => {
       { kind: "EOF", value: "\x00", line: 1, col: 16 },
     ];
     const lex = new lexer.Lexer(input);
-    expect(lex.lex()).to.eql(output);
+
+    lex.lex().forEach(({ kind, value }, idx) => {
+      const { kind: oKind, value: oValue } = output[idx];
+
+      expect({ kind, value }).to.eql({ kind: oKind, value: oValue });
+    });
   });
 
   it("sould works for function calls", () => {
@@ -41,7 +51,11 @@ describe("lexer()", () => {
     ];
 
     const lex = new lexer.Lexer(input);
-    expect(lex.lex()).to.eql(output);
+    lex.lex().forEach(({ kind, value }, idx) => {
+      const { kind: oKind, value: oValue } = output[idx];
+
+      expect({ kind, value }).to.eql({ kind: oKind, value: oValue });
+    });
   });
 
   it("tokenize multiple lines", () => {
@@ -145,21 +159,21 @@ sum 4 5
 `;
 
     const output = [
-      { kind: "LET", value: "let", line: 1, col: 4 },
-      { kind: "IDENT", value: "sum", line: 1, col: 8 },
-      { kind: "IDENT", value: "a", line: 1, col: 10 },
-      { kind: "IDENT", value: "b", line: 1, col: 12 },
-      { kind: "ASSIGN", value: "=", line: 1, col: 14 },
-      { kind: "IDENT", value: "a", line: 1, col: 16 },
-      { kind: "PLUS", value: "+", line: 1, col: 18 },
-      { kind: "IDENT", value: "b", line: 1, col: 20 },
-      { kind: "NL", value: "\n", line: 1, col: 21 },
-      { kind: "IDENT", value: "sum", line: 2, col: 4 },
-      { kind: "NUMBER", value: "4", line: 2, col: 6 },
-      { kind: "NUMBER", value: "5", line: 2, col: 8 },
-      { kind: "NL", value: "\n", line: 2, col: 9 },
-      { kind: "EOF", value: "\x00", line: 3, col: 3 },
-    ];
+  { kind: 'LET', value: 'let', line: 1, col: 4 },
+  { kind: 'IDENT', value: 'sum', line: 1, col: 8 },
+  { kind: 'IDENT', value: 'a', line: 1, col: 10 },
+  { kind: 'IDENT', value: 'b', line: 1, col: 12 },
+  { kind: 'ASSIGN', value: '=', line: 1, col: 14 },
+  { kind: 'IDENT', value: 'a', line: 1, col: 16 },
+  { kind: 'PLUS', value: '+', line: 1, col: 18 },
+  { kind: 'IDENT', value: 'b', line: 1, col: 20 },
+  { kind: 'NL', value: '\n', line: 1, col: 21 },
+  { kind: 'IDENT', value: 'sum', line: 2, col: 4 },
+  { kind: 'NUMBER', value: '4', line: 2, col: 6 },
+  { kind: 'NUMBER', value: '5', line: 2, col: 8 },
+  { kind: 'NL', value: '\n', line: 2, col: 9 },
+  { kind: 'EOF', value: '\x00', line: 3, col: 3 }
+]
 
     const lex = new lexer.Lexer(input);
 
@@ -169,4 +183,6 @@ sum 4 5
       expect({ kind, value }).to.eql({ kind: oKind, value: oValue });
     });
   });
+
+
 });
