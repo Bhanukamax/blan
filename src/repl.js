@@ -11,7 +11,7 @@ function repl(str) {
 
   const lex = new lexer_1.Lexer(str);
   const tokens = lex.lex();
-  // console.log(tokens);
+  console.log(tokens);
   try {
     // console.log("dadsfads");
     const ast = parser(tokens);
@@ -28,7 +28,7 @@ function runRepl() {
     try {
       var q = readlineSync.question("> ");
       const ast = repl(q);
-      // console.log(JSON.stringify(ast, null, 2));
+      console.log(JSON.stringify(ast, null, 2));
       eval(ast);
     } catch (e) {
       console.log("Error: ", e);
