@@ -28,7 +28,7 @@ function runRepl() {
     try {
       var q = readlineSync.question("> ");
       const ast = repl(q);
-      // console.log(JSON.stringify(ast, null, 2));
+      console.log(JSON.stringify(ast, null, 2));
       eval(ast);
     } catch (e) {
       console.log("Error: ", e);
