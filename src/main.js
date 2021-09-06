@@ -51,11 +51,9 @@ what => this + 2
     if (debugParser) {
       console.log("done parsing", JSON.stringify(ast, null, 2));
     }
-    console.log("evaluating the code::::");
     evaluator(ast);
   } else {
     repl();
-    console.log("nothing to be done");
   }
 }
 main();

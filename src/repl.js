@@ -5,7 +5,6 @@ const eval = require("./eval");
 
 // Wait for user's response.
 
-console.log("BLAN Repl!!");
 function hasFlag(flag) {
   return process.argv.indexOf(flag) > -1;
 }
