@@ -27,10 +27,15 @@ function evalExpression(node) {
       return evalExpression(scope[node.value]);
     }
   }
+
+  if (node.type === "BinaryExpression") {
+    if (node.operator === "+") {
+      return evalExpression(node.left) + evalExpression(node.right);
+    }
+  }
 }
 
 function evalLetStatement(node) {
-  debugger;
   scope[node.identifier.value] = node.expression;
 }
 
