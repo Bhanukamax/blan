@@ -48,7 +48,6 @@ function evalFunctionDeclaration(node) {
   const def = scope[defs][defName];
   def.parms = node.params.map((param) => param.value);
   def.body = node.expression;
-  console.log(j(scope, null, 2));
 }
 
 function evalLetStatement(node) {

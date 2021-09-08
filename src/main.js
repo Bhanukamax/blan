@@ -3,6 +3,7 @@ const lexer_1 = require("./lexer");
 const parser = require("./parser");
 const repl = require("./repl");
 const evaluator = require("./eval");
+const compile = require("./compiler");
 
 const { readFileSync } = require("fs");
 
@@ -31,6 +32,8 @@ what => this + 2
     fileNameIndex++;
     debugParser = true;
   }
+
+  const shouldCompile = hasFlag("-c");
   if (hasFile) {
     fileNameIndex = 2;
 
@@ -51,7 +54,12 @@ what => this + 2
     if (debugParser) {
       console.log("done parsing", JSON.stringify(ast, null, 2));
     }
-    evaluator(ast);
+    if (shouldCompile) {
+      const code = compile(ast);
+      console.log(code);
+    } else {
+      evaluator(ast);
+    }
   } else {
     repl();
   }

@@ -1,0 +1,5 @@
+let a = 4
+let b = 20
+print a b
+let sum a b = 3
+sum 4 5
